@@ -42,12 +42,12 @@ class KMeans:
         """
         self.fit_mat = mat #matrix for fitting
         self.n = mat.shape[0] #number of samples in matrix (i.e. number of rows)
-        self.d = mat.shape[1] #number of dimensions in matrix (i.e. number of columns)
+        self.m = mat.shape[1] #number of dimensions in matrix (i.e. number of columns)
         
         #for shorter typing:
         n = self.n
         k = self.k
-        d = self.d
+        m = self.m
         
         #set random seed
         np.random.seed(42) #set to 42 for now so results are reproducible
@@ -105,13 +105,21 @@ class KMeans:
         #get the euclidian distance between the centroids and each sample data point
         clusters = [[] for i in range(self.k)] #create a list of lists that represent empty clusters for now
         for idx,sample in enumerate(self.fit_mat):
-            = self._closest_centroid(sample, centroids)
-    pass
+            centroid_idx = self._closest_centroid(sample, centroids) #find the closest centroid for each sample
+            clusters[centroid_idx].append(idx) #append current sample index to the cluster with the centroid it is closest to
+    return clusters
 
     
     def _closest_centroid(self, sample, centroids):
-        
-    pass
+        #calculate the distance between the current sample (i.e. row of the input matrix) and each centroid, and take the min
+        closest_centroid = centroid[0]
+        for i in range(0,len(centroids)):
+            cdist(sample, centroid[i])
+            
+    return centroid_idx
+
+
+
     #create a function that gets the closest centroid (which is different from the get_centroids method above)
     #def _closest_centroid(self, data point, centroids)
     
