@@ -19,8 +19,16 @@ class KMeans:
             max_iter: int
                 the maximum number of iterations before quitting model fit
         """
+        #assign initial attributes
+        self.k = k
+        self.tol = tol
+        self.max_iter = max_iter
+        self.metric = euclidian
+        
     
     def fit(self, mat: np.ndarray):
+        #this is basically like creation of the clusters, or finding of the centroids, and then in the predict method
+        #you will place the data points on top of the fitted clusters based on what the data points are most similar to
         """
         fits the kmeans algorithm onto a provided 2D matrix
 
@@ -28,6 +36,7 @@ class KMeans:
             mat: np.ndarray
                 A 2D matrix where the rows are observations and columns are features
         """
+        #1. assign data points to a random cluster
 
     def predict(self, mat: np.ndarray) -> np.ndarray:
         """
@@ -50,8 +59,11 @@ class KMeans:
             float
                 the squared-mean error of the fit model
         """
+        #take difference between each point and the cluster center, for all of the points, then square that
 
     def get_centroids(self) -> np.ndarray:
+        #you will call this within the fit method to get the centroids
+        #assign the final centroids as an attribute of the class so that you can use it in the predict method
         """
         returns the centroid locations of the fit model
 
@@ -59,3 +71,5 @@ class KMeans:
             np.ndarray
                 a `k x m` 2D matrix representing the cluster centroids of the fit model
         """
+        
+    #create a function that gets the closest centroid (which is different from the get_centroids method above)
