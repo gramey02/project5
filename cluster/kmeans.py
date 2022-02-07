@@ -25,6 +25,10 @@ class KMeans:
         self.max_iter = max_iter
         self.metric = euclidian
         
+        #initialize empty clusters and centroids
+        self.clusters = [] #holds data point labels for the current clustering
+        self.centroids = [] #hold mean feature vector for each centroid
+        
     
     def fit(self, mat: np.ndarray):
         #this is basically like creation of the clusters, or finding of the centroids, and then in the predict method
@@ -36,7 +40,29 @@ class KMeans:
             mat: np.ndarray
                 A 2D matrix where the rows are observations and columns are features
         """
-        #1. assign data points to a random cluster
+        self.fit_mat = mat #matrix for fitting
+        self.n = mat.shape[0] #number of samples in matrix (i.e. number of rows)
+        self.d = mat.shape[1] #number of dimensions in matrix (i.e. number of columns)
+        
+        #for shorter typing:
+        n = self.n
+        k = self.k
+        d = self.d
+        
+        #set random seed
+        np.random.seed(42) #set to 42 for now so results are reproducible
+
+        #initialize centroids by randomly picking k data points as the starting centroids
+        np.random.choice(n, k, replace=False) #generate random indices to pick from the input array
+        for
+        #1. assign data points to a random cluster to initialize the centroids (can also pick k random points as centroids)
+        
+        #2. optimization
+        #for i in max_iters... -- finish when max_iters is reached, but also include 
+        #a break if convergence point is reached before then
+            #update the clusters
+            #update the centroids
+            #check if convergence has been reached
 
     def predict(self, mat: np.ndarray) -> np.ndarray:
         """
@@ -73,3 +99,14 @@ class KMeans:
         """
         
     #create a function that gets the closest centroid (which is different from the get_centroids method above)
+    #def _closest_centroid(self, data point, centroids)
+    
+    #create a (private) function that creates the clusters given centroids as an argument
+    #def _create_clusters(self, centroids)
+        #iterate over the actual data points to get the closest centroid to each data point,
+        #then assign the data point to the cluster that corresponds to that centroid
+    #return clusters
+    
+    #create a function that gets the Euclidian distance between two vectors
+    
+    #anything that the user doesn't explicitly need to call, make it a private method/function
