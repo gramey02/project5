@@ -42,7 +42,7 @@ class KMeans:
         """
         self.fit_mat = mat #matrix for fitting
         self.n = mat.shape[0] #number of samples in matrix (i.e. number of rows)
-        self.m = mat.shape[1] #number of dimensions in matrix (i.e. number of columns)
+        self.m = mat.shape[1] #number of features in matrix (i.e. number of columns)
         
         #for shorter typing:
         n = self.n
@@ -59,6 +59,16 @@ class KMeans:
         #optimization procedure
         for in in self.max_iter:
             self.clusters = self._create_clusters(self.centroids) #create the clusters based on the current centroids
+            old_centroids = self.centroids #store old centroids for comparison later
+            self.centroids = self.get_centroids() #recalculate centroids after new clusters have been created
+            
+            #calculate error between old centroids and newest centroids
+            if self.get_error() <= self.tol:
+                break
+                
+            
+            
+            
             #check the difference between the previous clusters and these clusters (i.e. check for convergence)
         #for i in max_iters... -- finish when max_iters is reached, but also include 
         #a break if convergence point is reached before then
@@ -81,14 +91,18 @@ class KMeans:
 
     def get_error(self) -> float:
         """
-        returns the final squared-mean error of the fit model
+        returns the final mean-squared error of the fit model
 
         outputs:
             float
                 the squared-mean error of the fit model
         """
-        #take difference between each point and the cluster center, for all of the points, then square that
-
+        #for each "iteration" in the for loop of the fit method
+        #calculate the distance from each point to its centroid (using whatever distance metric was provided)
+        #square the distances
+        #take the mean
+        pass
+        
     def get_centroids(self) -> np.ndarray:
         #you will call this within the fit method to get the centroids
         #assign the final centroids as an attribute of the class so that you can use it in the predict method
@@ -99,36 +113,49 @@ class KMeans:
             np.ndarray
                 a `k x m` 2D matrix representing the cluster centroids of the fit model
         """
+        centroids = np.zeroes((self.k, self.n)) #initialize an array where each row will be the mean values of a cluster
+        #for each cluster index and each cluster, get the actual sample values in each cluster and find their mean to get the
+        #overall mean feature values for the centroid
+        for cluster_idx, cluster in enumerate(clusters):
+            mean = np.mean(self.fit_mat[cluster], axis=0)
+            centroids[cluster_idx] = mean
+        return centroids
     
     def _create_clusters(self, centroids):
-        #assign all samples to the closest centroids
-        #get the euclidian distance between the centroids and each sample data point
+        """
+        assigns all samples in the input matrix to the closest centroids
+        
+        input:
+            mean feature vectors defining the centroids
+        output:
+            list containing indices of data samples sorted into which cluster they belong to
+        """
         clusters = [[] for i in range(self.k)] #create a list of lists that represent empty clusters for now
         for idx,sample in enumerate(self.fit_mat):
             centroid_idx = self._closest_centroid(sample, centroids) #find the closest centroid for each sample
             clusters[centroid_idx].append(idx) #append current sample index to the cluster with the centroid it is closest to
-    return clusters
+        return clusters
 
     
-    def _closest_centroid(self, sample, centroids):
+    
+    def _closest_centroid(self, sample, centroids, metric):
+        """
+        gets the index of the centroid that is closest to the input data point
+        
+        inputs:
+            sample
+                input data point in m dimensions
+            centroids
+                list of mean feature vectors representing each centroid
+            metric:string
+                distance metric used to calculate distances between sample and centroids
+        output:
+            index of centroid closest to sample
+        """
         #calculate the distance between the current sample (i.e. row of the input matrix) and each centroid, and take the min
-        closest_centroid = centroid[0]
+        distances = []
         for i in range(0,len(centroids)):
-            cdist(sample, centroid[i])
+            distances.append(cdist(sample, centroids[i], metric))
             
-    return centroid_idx
-
-
-
-    #create a function that gets the closest centroid (which is different from the get_centroids method above)
-    #def _closest_centroid(self, data point, centroids)
-    
-    #create a (private) function that creates the clusters given centroids as an argument
-    #def _create_clusters(self, centroids)
-        #iterate over the actual data points to get the closest centroid to each data point,
-        #then assign the data point to the cluster that corresponds to that centroid
-    #return clusters
-    
-    #create a function that gets the Euclidian distance between two vectors #may not need this with cdist
-    
-    #anything that the user doesn't explicitly need to call, make it a private method/function
+        centroid_idx = np.argmin(distances) #get index of minimum distance--corresponds to 
+        return centroid_idx
