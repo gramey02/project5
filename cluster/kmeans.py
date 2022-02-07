@@ -56,15 +56,33 @@ class KMeans:
         rand_idx = np.random.choice(n, k, replace=False) #generate random indices to pick from the input array
         self.centroids = [mat[idx] for idx in rand_idx] #assign the samples of those indices to be the initial centroids
         
+        #initialize variables
+        cur_mse = 0
+        last_mse = 0
+        
+        
         #optimization procedure
-        for in in self.max_iter:
-            self.clusters = self._create_clusters(self.centroids) #create the clusters based on the current centroids
-            old_centroids = self.centroids #store old centroids for comparison later
-            self.centroids = self.get_centroids() #recalculate centroids after new clusters have been created
+        for i in range(0,self.max_iter):
+            #if i=0, initialize centroids randomly
+            if i==0:
+                rand_idx = np.random.choice(n, k, replace=False) #generate random indices to pick from the input array
+                self.centroids = [mat[idx] for idx in rand_idx] #assign the samples of those indices to be the initial centroids
+            #otherwise, get the centroids from the mean of each cluster
+            else:
+                self.centroids = self.get_centroids() #get centroids
             
-            #calculate error between old centroids and newest centroids
-            if self.get_error() <= self.tol:
-                break
+            #now generate clusters from the calculated centroids
+            self.clusters = self._create_clusters(self.centroids)
+            #calculate the mse
+            cur_mse = self.get_error()
+            
+            if i==0:
+                last_mse = cur_mse
+            else:
+                if abs(cur_mse - last_mse) <= self.tol:
+                    break
+                else:
+                    last_mse = cur_mse
                 
             
             
@@ -101,6 +119,10 @@ class KMeans:
         #calculate the distance from each point to its centroid (using whatever distance metric was provided)
         #square the distances
         #take the mean
+        
+        
+        
+        
         pass
         
     def get_centroids(self) -> np.ndarray:
@@ -128,7 +150,7 @@ class KMeans:
         input:
             mean feature vectors defining the centroids
         output:
-            list containing indices of data samples sorted into which cluster they belong to
+            list of lists containing indices of data samples sorted into which cluster they belong to
         """
         clusters = [[] for i in range(self.k)] #create a list of lists that represent empty clusters for now
         for idx,sample in enumerate(self.fit_mat):
