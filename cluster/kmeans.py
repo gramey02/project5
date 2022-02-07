@@ -23,11 +23,11 @@ class KMeans:
         self.k = k
         self.tol = tol
         self.max_iter = max_iter
-        self.metric = euclidian
+        self.metric = metric
         
         #initialize empty clusters and centroids
-        self.clusters = [] #holds data point labels for the current clustering
-        self.centroids = [] #hold mean feature vector for each centroid
+        self.clusters = [[] for i in range(self.k)] #holds data point labels for the current clustering
+        self.centroids = [] #holds mean feature vector for each centroid
         
     
     def fit(self, mat: np.ndarray):
@@ -53,11 +53,13 @@ class KMeans:
         np.random.seed(42) #set to 42 for now so results are reproducible
 
         #initialize centroids by randomly picking k data points as the starting centroids
-        np.random.choice(n, k, replace=False) #generate random indices to pick from the input array
-        for
-        #1. assign data points to a random cluster to initialize the centroids (can also pick k random points as centroids)
+        rand_idx = np.random.choice(n, k, replace=False) #generate random indices to pick from the input array
+        self.centroids = [mat[idx] for idx in rand_idx] #assign the samples of those indices to be the initial centroids
         
-        #2. optimization
+        #optimization procedure
+        for in in self.max_iter:
+            self.clusters = self._create_clusters(self.centroids) #create the clusters based on the current centroids
+            #check the difference between the previous clusters and these clusters (i.e. check for convergence)
         #for i in max_iters... -- finish when max_iters is reached, but also include 
         #a break if convergence point is reached before then
             #update the clusters
@@ -97,7 +99,19 @@ class KMeans:
             np.ndarray
                 a `k x m` 2D matrix representing the cluster centroids of the fit model
         """
+    
+    def _create_clusters(self, centroids):
+        #assign all samples to the closest centroids
+        #get the euclidian distance between the centroids and each sample data point
+        clusters = [[] for i in range(self.k)] #create a list of lists that represent empty clusters for now
+        for idx,sample in enumerate(self.fit_mat):
+            = self._closest_centroid(sample, centroids)
+    pass
+
+    
+    def _closest_centroid(self, sample, centroids):
         
+    pass
     #create a function that gets the closest centroid (which is different from the get_centroids method above)
     #def _closest_centroid(self, data point, centroids)
     
@@ -107,6 +121,6 @@ class KMeans:
         #then assign the data point to the cluster that corresponds to that centroid
     #return clusters
     
-    #create a function that gets the Euclidian distance between two vectors
+    #create a function that gets the Euclidian distance between two vectors #may not need this with cdist
     
     #anything that the user doesn't explicitly need to call, make it a private method/function
