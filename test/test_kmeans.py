@@ -1,1 +1,4 @@
-# Write your k-means unit tests here
+#Importing Dependencies
+import pytest
+import numpy as np
+from cluster import (KMeans, Silhouette)
