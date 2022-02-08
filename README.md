@@ -1,3 +1,4 @@
+![BuildStatus](https://github.com/gramey02/project5/workflows/project5/badge.svg?event=push)
 # Project 5
 Implementation of KMeans and Silhouette Scoring
 
