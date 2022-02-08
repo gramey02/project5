@@ -78,21 +78,14 @@ class KMeans:
             
             if i==0:
                 last_mse = cur_mse
+            #check if convergence has been reached
             else:
                 if abs(cur_mse - last_mse) <= self.tol:
                     break
                 else:
                     last_mse = cur_mse
                 
-            
-            
-            
-            #check the difference between the previous clusters and these clusters (i.e. check for convergence)
-        #for i in max_iters... -- finish when max_iters is reached, but also include 
-        #a break if convergence point is reached before then
-            #update the clusters
-            #update the centroids
-            #check if convergence has been reached
+
 
     def predict(self, mat: np.ndarray) -> np.ndarray:
         """
@@ -106,6 +99,14 @@ class KMeans:
             np.ndarray
                 a 1D array with the cluster label for each of the observations in `mat`
         """
+        labels = np.emtpy((1,mat.shape[0])) #create an empty 1D array to fill
+        self.mat = mat
+        clusters = [[] for i in range(self.k)] #create a list of lists that represent empty clusters for now
+        for sample_idx, sample in enumerate(mat):
+            centroid_idx = self._closest_centroid(sample, self.centroids) #find the closest centroid for each sample
+            labels[sample_idx].append(centroid_idx) #append cluster label to 1D array
+        return labels
+        
 
     def get_error(self) -> float:
         """
@@ -115,15 +116,22 @@ class KMeans:
             float
                 the squared-mean error of the fit model
         """
-        #for each "iteration" in the for loop of the fit method
-        #calculate the distance from each point to its centroid (using whatever distance metric was provided)
+        errors = []
+        for i in range(0,len(self.clusters)): #i is the index of the centroid/cluster you want
+            for j in range(0,len(self.clusters[i])): #j is the index of each data point in the current cluster i
+                cur_cluster = self.clusters[i] #get the list of samples in the current cluster
+                cur_idx = cur_cluster[j] #get the index of the current data point since only indices are stored in self.clusters
+                sample = self.fit_mat[cur_idx] #get the feature vector of the current data point from the original matrix
+                
+                #calculate distance between sample and corresponding centroid
+                dist = cdist(sample, self.centroids[i], self.metric)
+                errors.append(dist) #append to a list of errors
+                
         #square the distances
-        #take the mean
+        squared_errors = [number ** 2 for number in errors]
+        #take mean of squared errors to get MSE
+        return np.mean(squared_errors)
         
-        
-        
-        
-        pass
         
     def get_centroids(self) -> np.ndarray:
         #you will call this within the fit method to get the centroids
@@ -160,7 +168,7 @@ class KMeans:
 
     
     
-    def _closest_centroid(self, sample, centroids, metric):
+    def _closest_centroid(self, sample, centroids):
         """
         gets the index of the centroid that is closest to the input data point
         
@@ -177,7 +185,7 @@ class KMeans:
         #calculate the distance between the current sample (i.e. row of the input matrix) and each centroid, and take the min
         distances = []
         for i in range(0,len(centroids)):
-            distances.append(cdist(sample, centroids[i], metric))
+            distances.append(cdist(sample, centroids[i], self.metric))
             
         centroid_idx = np.argmin(distances) #get index of minimum distance--corresponds to 
         return centroid_idx
