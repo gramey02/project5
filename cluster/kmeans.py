@@ -143,11 +143,11 @@ class KMeans:
             np.ndarray
                 a `k x m` 2D matrix representing the cluster centroids of the fit model
         """
-        centroids = np.zeros((self.k, self.n)) #initialize an array where each row will be the mean values of a cluster
+        centroids = []
         #for each cluster index and each cluster, get the actual sample values in each cluster and find their mean to get the
         #overall mean feature values for the centroid
         for cluster_idx, cluster in enumerate(self.clusters):
-            mean = np.mean(self.fit_mat[cluster], axis=0)
+            mean = (np.array(self.fit_mat[cluster])).mean(axis=0)
             centroids[cluster_idx] = mean
         return centroids
     
