@@ -99,13 +99,13 @@ class KMeans:
             np.ndarray
                 a 1D array with the cluster label for each of the observations in `mat`
         """
-        labels = np.emtpy((1,mat.shape[0])) #create an empty 1D array to fill
+        labels = [] #create an empty 1D array to fill
         self.mat = mat
         clusters = [[] for i in range(self.k)] #create a list of lists that represent empty clusters for now
         for sample_idx, sample in enumerate(mat):
             centroid_idx = self._closest_centroid(sample, self.centroids) #find the closest centroid for each sample
-            labels[sample_idx].append(centroid_idx) #append cluster label to 1D array
-        return labels
+            labels.append(centroid_idx) #append cluster label to 1D array
+        return np.array([labels])
         
 
     def get_error(self) -> float:
@@ -143,7 +143,7 @@ class KMeans:
             np.ndarray
                 a `k x m` 2D matrix representing the cluster centroids of the fit model
         """
-        centroids = []
+        centroids = [[] for i in range(self.k)]
         #for each cluster index and each cluster, get the actual sample values in each cluster and find their mean to get the
         #overall mean feature values for the centroid
         for cluster_idx, cluster in enumerate(self.clusters):
