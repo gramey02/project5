@@ -19,6 +19,10 @@ class KMeans:
             max_iter: int
                 the maximum number of iterations before quitting model fit
         """
+        #raise an error if k=0
+        if k==0:
+            raise AttributeError("k must be a positive integer greater than zero")
+        
         #assign initial attributes
         self.k = k
         self.tol = tol
