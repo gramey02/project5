@@ -183,9 +183,6 @@ class KMeans:
             index of centroid closest to sample
         """
         #calculate the distance between the current sample (i.e. row of the input matrix) and each centroid, and take the min
-        distances = []
-        for i in range(0,len(centroids)):
-            distances.append(cdist(sample, centroids[i], self.metric))
-            
-        centroid_idx = np.argmin(distances) #get index of minimum distance--corresponds to 
+        distances = cdist(sample, centroids, self.metric)
+        centroid_idx = np.argmin(distances) #get index of minimum distance--corresponds to closest centroid
         return centroid_idx
