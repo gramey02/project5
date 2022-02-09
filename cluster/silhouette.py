@@ -42,10 +42,12 @@ class Silhouette:
                 (cur_point_dist[y[0][label_idx]]).append(dist) #add dist to list in l corresponding to the current label
             
             all_point_distances.append(cur_point_dist) #append to keep track of distance lists for each point
+            print(cur_point_dist)
+            
+            a = None #will hold avg dist from current point to other points in its cluster
+            b = [] #will hold avg dist from current point to other clusters
             
             for i in range(0,len(cur_point_dist)):
-                a = None #will hold avg dist from current point to other points in its cluster
-                b = [] #will hold avg dist from current point to other clusters
 
                 #if the current point and the current list of distances were calculated from points in the same cluster,
                 #subtract one from the length of the current list
@@ -58,8 +60,10 @@ class Silhouette:
                 else:
                     #average of the distances from the current point to other cluster points
                     b.append(sum(cur_point_dist[i])/len(cur_point_dist[i]))
+                print(a)
+                print(b)
                 
-            scores[0][sample_idx] = (min(b)-a)/max(min(b)-a)
+            scores[0][sample_idx] = (min(b)-a)/max(min(b),a)
             
 
         return scores
