@@ -48,6 +48,9 @@ class KMeans:
         self.n = mat.shape[0] #number of samples in matrix (i.e. number of rows)
         self.m = mat.shape[1] #number of features in matrix (i.e. number of columns)
         
+        if k>self.n:
+            raise AttributeError("k must be less than the number of observations")
+        
         #for shorter typing:
         n = self.n
         k = self.k
