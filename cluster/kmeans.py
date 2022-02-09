@@ -124,7 +124,7 @@ class KMeans:
                 sample = self.fit_mat[cur_idx] #get the feature vector of the current data point from the original matrix
                 
                 #calculate distance between sample and corresponding centroid
-                dist = cdist(sample, self.centroids[i], self.metric)
+                dist = cdist(np.array([sample]), np.array([self.centroids[i]]), self.metric)
                 errors.append(dist) #append to a list of errors
                 
         #square the distances
@@ -146,7 +146,7 @@ class KMeans:
         centroids = np.zeroes((self.k, self.n)) #initialize an array where each row will be the mean values of a cluster
         #for each cluster index and each cluster, get the actual sample values in each cluster and find their mean to get the
         #overall mean feature values for the centroid
-        for cluster_idx, cluster in enumerate(clusters):
+        for cluster_idx, cluster in enumerate(self.clusters):
             mean = np.mean(self.fit_mat[cluster], axis=0)
             centroids[cluster_idx] = mean
         return centroids
@@ -182,7 +182,10 @@ class KMeans:
         output:
             index of centroid closest to sample
         """
+        #convert centroids to an array
         #calculate the distance between the current sample (i.e. row of the input matrix) and each centroid, and take the min
-        distances = cdist(sample, centroids, self.metric)
+        distances = []
+        for i in range(0,len(centroids)):
+            distances.append(cdist(np.array([sample]), np.array([centroids[i]]), self.metric))
         centroid_idx = np.argmin(distances) #get index of minimum distance--corresponds to closest centroid
         return centroid_idx
