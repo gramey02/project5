@@ -29,31 +29,37 @@ class Silhouette:
         
         k = len(np.unique(y)) #get number of clusters
         all_point_distances = [] #will hold distance lists for each point
-        scores=np.empty((1,X.shape[0]))
+        scores=np.zeros((1,X.shape[0]))
         
         for sample_idx,sample in enumerate(X):
-            l = [[] for i in range(k)] #create a list of lists that holding dist. vals betw cur_point and other cluster points
+            #create a list of lists that holds dist. vals betw cur_point and other cluster points
+            cur_point_dist = [[] for i in range(k)]
             
-            for label_idx in range(0,len(y)):
-                dist = cdist(X[sample_idx], X[label_idx], self.metric) #distance between current point and all other points
-                (l[y[label_idx]]).append(dist) #add dist to list in l corresponding to the current label
+            for label_idx in range(0,y.shape[1]):
+                #distance between current point and all other points
+                dist = cdist(np.array([X[sample_idx]]), np.array([X[label_idx]]), self.metric)
+                dist = dist[0][0] #unlist the current distance value
+                (cur_point_dist[y[0][label_idx]]).append(dist) #add dist to list in l corresponding to the current label
             
-            all_point_distances.append(l) #append to keep track of distance lists for each point
+            all_point_distances.append(cur_point_dist) #append to keep track of distance lists for each point
             
-            for i in range(0,len(l)):
+            for i in range(0,len(cur_point_dist)):
                 a = None #will hold avg dist from current point to other points in its cluster
                 b = [] #will hold avg dist from current point to other clusters
 
                 #if the current point and the current list of distances were calculated from points in the same cluster,
                 #subtract one from the length of the current list
-                if i==y[sample_idx]:
-                    a = sum(l[i])/(len(l[i])-1) #average of distances between current point and points in its cluster
+                if i == (y[0][sample_idx]):
+                    #average of distances between current point and points in its cluster
+                    #subtract 1 because the list also includes a zero for the distance between the current point and itself
+                    a = sum(cur_point_dist[i])/(len(cur_point_dist[i])-1)
                     
                 #otherwise calculate the average as normal
                 else:
-                    b.append = sum(l[i])/len(l[i]) #average of the distances from the current point to other cluster points
+                    #average of the distances from the current point to other cluster points
+                    b.append(sum(cur_point_dist[i])/len(cur_point_dist[i]))
                 
-            scores[sample_idx] = (min(b)-a)/max(min(b)-a)
+            scores[0][sample_idx] = (min(b)-a)/max(min(b)-a)
             
 
         return scores
