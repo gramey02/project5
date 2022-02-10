@@ -55,15 +55,27 @@ def test_kmeans():
     
     #--------------------------------------------------------------
     #check that the algorithm can handle single-dimensional data
-    
+    #the provided plotting function will not be able to plot the results, but can still run some checks
+    l_clusters, l_labels = make_clusters(scale=2, m=1)
+    kmeans5 = KMeans(k=3)
+    kmeans5.fit(l_clusters)
+    pred_labels = kmeans6.predict(l_clusters)
+    assert len(np.unique(kmeans5.clusters))==3
+    assert len(kmeans5.clusters) == 3
+    assert len(kmeans5.centroids[0]) #check that the centroids only have 1 dimension
     
     
     #---------------------------------------------------------------
     #check that the algorithm can handle high-dimensional data
-    d_clusters, d_labels = make_clusters(n=500, m=1000, k=5)
-    kmeans6 = KMeans(k=5)
-    kmeans6.fit(d_clusters)
-    pred_labels = kmeans6.predict(d_clusters)
+    t_clusters, t_labels = make_clusters(scale=0.3, m=200)
+    kmeans6 = KMeans(k=3)
+    kmeans6.fit(t_clusters)
+    pred_labels = kmeans6.predict(t_clusters)
+    #assert that fitting and predictions happened correctly
+    assert len(kmeans6.clusters)==5
+    assert len(np.unique(kmeans6.clusters))==5
+    assert pred_labels[0][300]==pred_labels[0][250]
+    assert len(kmeans6.centroids[0]) #check that the centroids have 200 dimensions
     
     
     
