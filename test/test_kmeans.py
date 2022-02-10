@@ -76,13 +76,4 @@ def test_kmeans():
     assert len(np.unique(kmeans6.clusters))==5
     assert pred_labels[0][300]==pred_labels[0][250]
     assert len(kmeans6.centroids[0]) #check that the centroids have 200 dimensions
-    
-    
-    
 
-
-def test_silhouette():
-    #check to make sure silhouette scores fall between -1 and 1
-    #check that silhouette scores incr. as k increases (maybe compare avg silhouette score for the data in different k cases)
-    
-    pass
