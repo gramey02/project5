@@ -57,7 +57,7 @@ class KMeans:
         m = self.m
         
         #set random seed
-        np.random.seed(42) #set to 42 for now so results are reproducible
+        np.random.seed() #set to 42 for now so results are reproducible
 
         #initialize centroids by randomly picking k data points as the starting centroids
         rand_idx = np.random.choice(n, k, replace=False) #generate random indices to pick from the input array
